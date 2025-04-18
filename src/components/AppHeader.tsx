@@ -83,7 +83,7 @@ const AppHeader: React.FC<AppHeaderProps> = ({
           }} />
             <span style={{
             color: '#f14010'
-          }} className="text-blue-700">Meta csv Generator Pro</span>
+          }} className="text-blue-700">Meta CSV Generator Pro</span>
           </h1>
           <div className="ml-4 text-xs text-gray-400">Developed by Pikshine</div>
         </div>
