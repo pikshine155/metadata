@@ -56,7 +56,7 @@ const AppHeader: React.FC<AppHeaderProps> = ({
     toast.success('API key cleared');
   };
   const openSupportPage = () => {
-    window.open("https://www.facebook.com/FreepikScripts", "_blank");
+    window.open("https://www.facebook.com/pikshine", "_blank");
   };
   const openTutorialVideo = () => {
     window.open("https://youtu.be/JaWAE8S0-wM?si=oJDfh60P7T_VVujL", "_blank");
