@@ -73,7 +73,7 @@ const PricingPage: React.FC = () => {
               </CardContent>
               <CardFooter>
                 <Button size="lg" className="w-full bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white" onClick={() => window.open('https://csvpikshine.paymently.io/default/paymentlink/pay/SIBUfRkJxIDgK7GhkrL4WdAJofkOdkL8hnidHQdF', '_blank')}>
-                  Upgrade to Basic
+                  Upgrade to Premium
                 </Button>
               </CardFooter>
             </Card>
@@ -105,7 +105,7 @@ const PricingPage: React.FC = () => {
               </CardContent>
               <CardFooter>
                 <Button size="lg" className="w-full bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white" onClick={() => window.open('https://csvpikshine.paymently.io/default/paymentlink/pay/oj1MGLV0cgkc5yHv034GDR2WzhcT8JT2ojM71s18', '_blank')}>
-                  Upgrade to Premium
+                  Upgrade to Basic
                 </Button>
               </CardFooter>
             </Card>
