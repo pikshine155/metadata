@@ -1,8 +1,8 @@
-
 export interface UserProfile {
   id: string;
   email: string;
   credits_used: number;
+  credits_limit: number;
   is_premium: boolean;
   created_at?: string;
   updated_at?: string;

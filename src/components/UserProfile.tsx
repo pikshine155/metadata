@@ -1,88 +1,72 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useAuth } from '@/context/AuthContext';
 import { Button } from '@/components/ui/button';
-import { LogOut, Check, Crown, Infinity, Clock } from 'lucide-react';
 import { Progress } from '@/components/ui/progress';
+import { LogOut, Infinity, Crown, Clock } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { format } from 'date-fns';
-import { getTimeRemaining, isPremiumExpired } from '@/utils/dateUtils';
-import { supabase } from '@/integrations/supabase/client';
-import UserSessions from './UserSessions';
+import { format, differenceInDays } from 'date-fns';
 
 const UserProfile: React.FC = () => {
   const { user, profile, signOut } = useAuth();
+  const navigate = useNavigate();
 
-  useEffect(() => {
-    const checkPremiumStatus = async () => {
-      if (profile?.is_premium && profile.expiration_date && isPremiumExpired(profile.expiration_date)) {
-        // Update user to free status when premium expires
-        const { error } = await supabase
-          .from('profiles')
-          .update({ 
-            is_premium: false,
-            expiration_date: null 
-          })
-          .eq('id', user?.id);
+  if (!user || !profile) {
+    return null;
+  }
 
-        if (error) {
-          console.error('Error updating premium status:', error);
-        }
-      }
-    };
+  const remainingCredits = profile.credits_limit - profile.credits_used;
+  const creditPercentage = (remainingCredits / profile.credits_limit) * 100;
+  
+  // Generate consistent avatar URL based on user email
+  const avatarUrl = `https://api.dicebear.com/7.x/personas/svg?seed=${user.email}`;
 
-    checkPremiumStatus();
-  }, [profile?.expiration_date, profile?.is_premium, user?.id]);
+  // Calculate time remaining for premium users
+  const getRemainingTime = () => {
+    if (!profile.expiration_date) return null;
+    const expirationDate = new Date(profile.expiration_date);
+    const daysRemaining = differenceInDays(expirationDate, new Date());
+    return daysRemaining > 0 ? `${daysRemaining} days` : 'Expired';
+  };
 
-  if (!user || !profile) return null;
-
-  const creditPercentage = Math.min(profile.credits_used / 10 * 100, 100);
-  const remainingCredits = profile.is_premium ? '∞' : Math.max(0, 10 - profile.credits_used);
-
-  // Generate avatar URL based on user email for consistency
-  const avatarSeed = user.email || 'default';
-  const avatarUrl = `https://api.dicebear.com/7.x/personas/svg?seed=${avatarSeed}`;
-
+  const timeRemaining = getRemainingTime();
   const formattedExpirationDate = profile.expiration_date 
     ? format(new Date(profile.expiration_date), 'MMM dd, yyyy')
     : null;
 
-  const timeRemaining = profile.is_premium && profile.expiration_date 
-    ? getTimeRemaining(profile.expiration_date)
-    : '';
-
   return (
-    <div className="space-y-4">
+    <div className="w-full max-w-sm mx-auto">
       <div className="bg-gray-900 border border-gray-800 rounded-xl overflow-hidden shadow-lg">
-        <div className="p-4 border-b border-gray-800 px-0">
+        <div className="p-4 border-b border-gray-800">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-3">
-              <Avatar className="ring-2 ring-blue-500/50">
+              <Avatar className="h-10 w-10 border-2 border-gray-700">
                 <AvatarImage src={avatarUrl} alt={user.email} />
-                <AvatarFallback className="bg-blue-900">
-                  {user.email.charAt(0).toUpperCase()}
+                <AvatarFallback className="bg-gray-800 text-gray-400">
+                  {user.email?.[0]?.toUpperCase()}
                 </AvatarFallback>
               </Avatar>
               <div>
-                <p className="font-medium text-white">{user.email}</p>
-                <div className="flex items-center text-sm text-gray-400">
-                  {profile.is_premium ? (
-                    <div className="flex flex-col">
-                      <div className="flex items-center text-amber-400">
-                        <Crown className="h-3 w-3 mr-1 bg-[#0d0e0d]" />
-                        <span className="text-[#01fa01]">Premium User</span>
+                <h3 className="text-lg font-medium text-white">{user.email}</h3>
+                <div className="flex flex-col">
+                  <div className="flex items-center text-sm">
+                    {profile.is_premium ? (
+                      <div className="flex items-center text-[#01fa01]">
+                        <Crown className="h-4 w-4 mr-1" />
+                        <span>Premium User</span>
                       </div>
-                      {formattedExpirationDate && (
-                        <div className="flex flex-col text-xs text-gray-400 mt-1">
-                          <div className="flex items-center">
-                            <Clock className="h-3 w-3 mr-1" />
-                            <span>Time remaining: {timeRemaining}</span>
-                          </div>
-                          <span>Expires: {formattedExpirationDate}</span>
-                        </div>
-                      )}
+                    ) : (
+                      <span className="text-gray-400">Free User</span>
+                    )}
+                  </div>
+                  {profile.is_premium && timeRemaining && (
+                    <div className="flex flex-col text-xs text-gray-400 mt-1">
+                      <div className="flex items-center">
+                        <Clock className="h-3 w-3 mr-1" />
+                        <span>Time remaining: {timeRemaining}</span>
+                      </div>
+                      <span>Expires: {formattedExpirationDate}</span>
                     </div>
-                  ) : (
-                    <span>Free User</span>
                   )}
                 </div>
               </div>
@@ -116,7 +100,6 @@ const UserProfile: React.FC = () => {
           )}
         </div>
       </div>
-      <UserSessions />
     </div>
   );
 };
