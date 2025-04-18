@@ -38,48 +38,37 @@ const UserProfile: React.FC = () => {
     <div className="w-full max-w-sm mx-auto">
       <div className="bg-gray-900 border border-gray-800 rounded-xl overflow-hidden shadow-lg">
         <div className="p-4 border-b border-gray-800">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-3">
-              <Avatar className="h-10 w-10 border-2 border-gray-700">
-                <AvatarImage src={avatarUrl} alt={user.email} />
-                <AvatarFallback className="bg-gray-800 text-gray-400">
-                  {user.email?.[0]?.toUpperCase()}
-                </AvatarFallback>
-              </Avatar>
-              <div>
-                <h3 className="text-lg font-medium text-white">{user.email}</h3>
-                <div className="flex flex-col">
-                  <div className="flex items-center text-sm">
-                    {profile.is_premium ? (
-                      <div className="flex items-center text-[#01fa01]">
-                        <Crown className="h-4 w-4 mr-1" />
-                        <span>Premium User</span>
-                      </div>
-                    ) : (
-                      <span className="text-gray-400">Free User</span>
-                    )}
-                  </div>
-                  {profile.is_premium && timeRemaining && (
-                    <div className="flex flex-col text-xs text-gray-400 mt-1">
-                      <div className="flex items-center">
-                        <Clock className="h-3 w-3 mr-1" />
-                        <span>Time remaining: {timeRemaining}</span>
-                      </div>
-                      <span>Expires: {formattedExpirationDate}</span>
+          <div className="flex items-center space-x-3">
+            <Avatar className="h-10 w-10 border-2 border-gray-700">
+              <AvatarImage src={avatarUrl} alt={user.email} />
+              <AvatarFallback className="bg-gray-800 text-gray-400">
+                {user.email?.[0]?.toUpperCase()}
+              </AvatarFallback>
+            </Avatar>
+            <div>
+              <h3 className="text-lg font-medium text-white">{user.email}</h3>
+              <div className="flex flex-col">
+                <div className="flex items-center text-sm">
+                  {profile.is_premium ? (
+                    <div className="flex items-center text-[#01fa01]">
+                      <Crown className="h-4 w-4 mr-1" />
+                      <span>Premium User</span>
                     </div>
+                  ) : (
+                    <span className="text-gray-400">Free User</span>
                   )}
                 </div>
+                {profile.is_premium && timeRemaining && (
+                  <div className="flex flex-col text-xs text-gray-400 mt-1">
+                    <div className="flex items-center">
+                      <Clock className="h-3 w-3 mr-1" />
+                      <span>Time remaining: {timeRemaining}</span>
+                    </div>
+                    <span>Expires: {formattedExpirationDate}</span>
+                  </div>
+                )}
               </div>
             </div>
-            <Button 
-              variant="outline" 
-              size="sm" 
-              onClick={signOut} 
-              className="border-gray-700 text-gray-300 hover:bg-gray-800 hover:text-white transition-all duration-300 hover:-translate-y-1 my-0 py-0 px-[10px] text-base mx-0"
-            >
-              <LogOut className="h-4 w-4 mr-1" />
-              Sign Out
-            </Button>
           </div>
         </div>
         
@@ -98,6 +87,18 @@ const UserProfile: React.FC = () => {
               indicatorClassName="bg-gradient-to-r from-amber-500 to-orange-500" 
             />
           )}
+        </div>
+
+        <div className="p-4 border-t border-gray-800">
+          <Button 
+            variant="outline" 
+            size="sm" 
+            onClick={signOut} 
+            className="w-full border-gray-700 text-gray-300 hover:bg-gray-800 hover:text-white transition-all duration-300"
+          >
+            <LogOut className="h-4 w-4 mr-2" />
+            Sign Out
+          </Button>
         </div>
       </div>
     </div>
