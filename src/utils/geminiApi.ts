@@ -1,4 +1,3 @@
-
 import { Platform } from '@/components/PlatformSelector';
 import { GenerationMode } from '@/components/GenerationModeSelector';
 import { getRelevantFreepikKeywords, suggestCategoriesForShutterstock, suggestCategoriesForAdobeStock, removeSymbolsFromTitle } from './imageHelpers';
@@ -136,9 +135,9 @@ export async function analyzeImageWithGemini(
     }
     
     // Extract JSON from the response text
-    let jsonMatch = text.match(/```json\n([\s\S]*?)\n```/) || 
-                    text.match(/```\n([\s\S]*?)\n```/) ||
-                    text.match(/\{[\s\S]*\}/);
+    const jsonMatch = text.match(/```json\n([\s\S]*?)\n```/) || 
+                     text.match(/```\n([\s\S]*?)\n```/) ||
+                     text.match(/\{[\s\S]*\}/);
                     
     let jsonStr = jsonMatch ? jsonMatch[1] || jsonMatch[0] : text;
     

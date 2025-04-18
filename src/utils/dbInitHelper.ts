@@ -1,6 +1,10 @@
-
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
+import { SupabaseClient } from '@supabase/supabase-js';
+
+interface RpcResponse {
+  error: { code: string } | null;
+}
 
 /**
  * Helper function to check if the active_sessions functions exists
@@ -8,9 +12,13 @@ import { toast } from 'sonner';
  */
 export const checkActiveSessionsTable = async (): Promise<boolean> => {
   try {
-    // Try a function call that would fail if the function doesn't exist
-    // Use type assertion to bypass TypeScript's type checking
-    const { error } = await (supabase.rpc as any)('check_active_session', {
+    // Using type assertion to handle custom RPC function
+    const rpc = supabase.rpc as unknown as (
+      fn: string,
+      params: Record<string, unknown>
+    ) => Promise<RpcResponse>;
+    
+    const { error } = await rpc('check_active_session', {
       user_email: 'test@example.com'
     });
     
