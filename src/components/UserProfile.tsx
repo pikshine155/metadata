@@ -15,8 +15,8 @@ const UserProfile: React.FC = () => {
     return null;
   }
 
-  const remainingCredits = profile.credits_limit - profile.credits_used;
-  const creditPercentage = (remainingCredits / profile.credits_limit) * 100;
+  const remainingCredits = profile.is_premium ? Infinity : Math.max(0, 10 - profile.credits_used);
+  const creditPercentage = profile.is_premium ? 100 : Math.max(0, Math.min(100, ((10 - profile.credits_used) / 10) * 100));
   
   // Generate consistent avatar URL based on user email
   const avatarUrl = `https://api.dicebear.com/7.x/personas/svg?seed=${user.email}`;

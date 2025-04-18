@@ -139,7 +139,7 @@ const Index: React.FC = () => {
   };
   
   const handleUpgradePlan = () => {
-    window.location.href = PAYMENT_GATEWAY_URL;
+    navigate('/pricing');
   };
   
   const handleProcessImages = async () => {
